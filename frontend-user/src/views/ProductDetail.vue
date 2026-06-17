@@ -141,6 +141,7 @@ import api from '@/api'
 import { useCartStore } from '@/stores/cart'
 import { useFavoritesStore } from '@/stores/favorites'
 import { useUserStore } from '@/stores/user'
+import { useHistoryStore } from '@/stores/history'
 import QuantitySelector from '@/components/common/QuantitySelector.vue'
 
 const route = useRoute()
@@ -148,6 +149,7 @@ const router = useRouter()
 const cartStore = useCartStore()
 const favoritesStore = useFavoritesStore()
 const userStore = useUserStore()
+const historyStore = useHistoryStore()
 
 const loading = ref(false)
 const addingCart = ref(false)
@@ -165,14 +167,15 @@ async function fetchProduct() {
   try {
     const res = await api.getProductDetail(route.params.id)
     if (res.code === 200) {
-      product.value = res.data
-      currentImage.value = res.data.images?.[0] || res.data.image
-      // 初始化规格选择
-      if (res.data.specs?.length) {
-        res.data.specs.forEach(spec => {
-          selectedSpecs.value[spec.name] = spec.values[0]
-        })
-      }
+        product.value = res.data
+        currentImage.value = res.data.images?.[0] || res.data.image
+        historyStore.addRecord(res.data)
+        // 初始化规格选择
+        if (res.data.specs?.length) {
+          res.data.specs.forEach(spec => {
+            selectedSpecs.value[spec.name] = spec.values[0]
+          })
+        }
     } else {
       ElMessage.error(res.message || '商品不存在')
       router.push('/')
