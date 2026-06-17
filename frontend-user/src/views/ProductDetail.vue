@@ -140,6 +140,7 @@ import { ElMessage } from 'element-plus'
 import api from '@/api'
 import { useCartStore } from '@/stores/cart'
 import { useFavoritesStore } from '@/stores/favorites'
+import { useRecentViewsStore } from '@/stores/recentViews'
 import { useUserStore } from '@/stores/user'
 import QuantitySelector from '@/components/common/QuantitySelector.vue'
 
@@ -147,6 +148,7 @@ const route = useRoute()
 const router = useRouter()
 const cartStore = useCartStore()
 const favoritesStore = useFavoritesStore()
+const recentViewsStore = useRecentViewsStore()
 const userStore = useUserStore()
 
 const loading = ref(false)
@@ -173,6 +175,8 @@ async function fetchProduct() {
           selectedSpecs.value[spec.name] = spec.values[0]
         })
       }
+      // 记录浏览历史
+      recentViewsStore.addItem(res.data)
     } else {
       ElMessage.error(res.message || '商品不存在')
       router.push('/')
