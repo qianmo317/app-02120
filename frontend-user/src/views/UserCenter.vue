@@ -34,6 +34,10 @@
               <el-icon><Star /></el-icon>
               <span>我的收藏</span>
             </el-menu-item>
+            <el-menu-item index="history">
+              <el-icon><Clock /></el-icon>
+              <span>最近浏览</span>
+            </el-menu-item>
           </el-menu>
         </aside>
 
@@ -104,6 +108,11 @@
           <div v-if="activeMenu === 'favorites'" class="redirect-section">
             <EmptyState text="正在跳转到我的收藏..." :icon="Star" />
           </div>
+
+          <!-- 最近浏览跳转提示 -->
+          <div v-if="activeMenu === 'history'" class="redirect-section">
+            <EmptyState text="正在跳转到最近浏览..." :icon="Clock" />
+          </div>
         </main>
       </div>
     </div>
@@ -114,7 +123,7 @@
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { List, Location, Star } from '@element-plus/icons-vue'
+import { List, Location, Star, Clock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import EmptyState from '@/components/common/EmptyState.vue'
 
@@ -143,6 +152,9 @@ function handleMenuSelect(index) {
         break
       case 'favorites':
         router.push('/user/favorites')
+        break
+      case 'history':
+        router.push('/user/history')
         break
     }
   }, 500)
