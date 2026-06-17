@@ -141,6 +141,7 @@ import api from '@/api'
 import { useCartStore } from '@/stores/cart'
 import { useFavoritesStore } from '@/stores/favorites'
 import { useUserStore } from '@/stores/user'
+import { useBrowseHistoryStore } from '@/stores/browseHistory'
 import QuantitySelector from '@/components/common/QuantitySelector.vue'
 
 const route = useRoute()
@@ -148,6 +149,7 @@ const router = useRouter()
 const cartStore = useCartStore()
 const favoritesStore = useFavoritesStore()
 const userStore = useUserStore()
+const browseHistoryStore = useBrowseHistoryStore()
 
 const loading = ref(false)
 const addingCart = ref(false)
@@ -167,6 +169,7 @@ async function fetchProduct() {
     if (res.code === 200) {
       product.value = res.data
       currentImage.value = res.data.images?.[0] || res.data.image
+      browseHistoryStore.addRecord(res.data)
       // 初始化规格选择
       if (res.data.specs?.length) {
         res.data.specs.forEach(spec => {
