@@ -141,6 +141,7 @@ import api from '@/api'
 import { useCartStore } from '@/stores/cart'
 import { useFavoritesStore } from '@/stores/favorites'
 import { useUserStore } from '@/stores/user'
+import { useRecentlyViewedStore } from '@/stores/recentlyViewed'
 import QuantitySelector from '@/components/common/QuantitySelector.vue'
 
 const route = useRoute()
@@ -148,6 +149,7 @@ const router = useRouter()
 const cartStore = useCartStore()
 const favoritesStore = useFavoritesStore()
 const userStore = useUserStore()
+const recentlyViewedStore = useRecentlyViewedStore()
 
 const loading = ref(false)
 const addingCart = ref(false)
@@ -173,6 +175,8 @@ async function fetchProduct() {
           selectedSpecs.value[spec.name] = spec.values[0]
         })
       }
+      // 添加浏览记录
+      recentlyViewedStore.addRecord(res.data)
     } else {
       ElMessage.error(res.message || '商品不存在')
       router.push('/')
