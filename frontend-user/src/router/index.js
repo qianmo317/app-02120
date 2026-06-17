@@ -68,6 +68,12 @@ const routes = [
     meta: { title: '我的收藏' }
   },
   {
+    path: '/user/history',
+    name: 'BrowseHistory',
+    component: () => import('@/views/BrowseHistory.vue'),
+    meta: { title: '最近浏览' }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login.vue'),
